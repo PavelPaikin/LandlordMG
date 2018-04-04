@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_wrong_email_format">Wrong email format</string>
+    <string name="error_cant_be_empty">Can\'t be empty</string>
+    <string name="error_wrong_password_format">Password should be 3–16 length</string>
+    <string name="error_wrong_repass">Not match to password</string>
+
+    <string name="something_wrong">Something went wrong, try later</string>
+</resources>

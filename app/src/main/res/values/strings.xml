@@ -5,4 +5,62 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login2">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_repassword">Re-Password</string>
+    <string name="promt_name">Name</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="dont_have_account">Dont have account? Sign Up</string>
+    <string name="already_have_account">Already have account? Sign In</string>
+
+    <string name="bad_request">Error, Try later</string>
+    <string name="wrong_email_or_password">Wrong email or password</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="name">Name*</string>
+    <string name="address1">Address 1</string>
+    <string name="address2">Address 2</string>
+    <string name="city">City</string>
+    <string name="province">Province</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="rooms">Rooms</string>
+    <string name="bath">Bathrooms</string>
+    <string name="type_unit">Single Unit</string>
+    <string name="type_multi_unit">Multi-Unit</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="property_type">Property Type</string>
+    <string name="photo">Photo</string>
+    <string name="create_property">Create Property</string>
+    <string name="edit_property">Edit Property</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="create">Create</string>
+    <string name="addition_info">Additional Info</string>
+    <string name="notes">Notes</string>
+    <string name="properties">Properties</string>
+    <string name="no_property_created">No Property Created</string>
+    <string name="units">Units</string>
+    <string name="details">Details</string>
+    <string name="no_units_created">No Units Created</string>
+    <string name="no_lease_created">No Lease Created</string>
+    <string name="lease">Lease</string>
+    <string name="tenants">Tenants</string>
+    <string name="create_lease">Create Lease</string>
+    <string name="edit_lease">Edit Lease</string>
+    <string name="furnished">Furnished</string>
+    <string name="pet_friendly">Pet Friendly</string>
 </resources>
