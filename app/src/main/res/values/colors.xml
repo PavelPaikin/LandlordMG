@@ -6,7 +6,7 @@
     <color name="white">#FFFFFF</color>
     <color name="darkGray">#6E6E6E</color>
     <color name="gray">#b2b2b2</color>
-    <color name="lightGray">#DEDEDE</color>
+    <color name="lightGray">#dedede</color>
     <color name="appMainBackground">#eeeeee</color>
 
 </resources>

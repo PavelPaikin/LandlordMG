@@ -1,13 +1,8 @@
 package com.dev.lakik.landlordmg.Model
 
-import android.content.Context
-import android.support.design.widget.Snackbar
 import com.dev.lakik.landlordmg.Common.URLS
 import com.dev.lakik.landlordmg.Helpers.HTTPHelper
-import com.dev.lakik.landlordmg.R
-import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import org.json.JSONObject
 import java.io.Serializable
 import com.google.gson.reflect.TypeToken
@@ -39,17 +34,16 @@ class Property(var id: String,
     }
 
 
-
     fun save(callback: () -> Unit){
         var url = ""
         if(id.isEmpty()){
             url = URLS.PROPERTY_CREATE
         }else{
-
+            url = URLS.PROPERTY_UPDATE
         }
 
-        var propType = "single"
-        if(type == PropertyType.MULTI_UNIT) propType = "multy"
+        var propType = "SINGLE_UNIT"
+        if(type == PropertyType.MULTI_UNIT) propType = "MULTI_UNIT"
 
         val json = JSONObject()
         json.put("id", id)
@@ -60,7 +54,7 @@ class Property(var id: String,
         json.put("address1", address1)
         json.put("address2", address2)
         json.put("city", city)
-        json.put("state", province)
+        json.put("province", province)
         json.put("postalCode", postalCode)
         json.put("rooms", rooms.toString())
         json.put("bathrooms", bathrooms.toString())
@@ -71,32 +65,55 @@ class Property(var id: String,
         json.put("api_token", User.instance!!.apiToken)
 
 
-        Fuel.post(url).body(json.toString()).response { request, response, result ->
-            val (data, error) = result
-            if ((error == null) && (data!=null)) {
-                val res = Property.parseJSON(String(data))
-                //if(res) {
-                    callback()
-                //}else{
-                    //Snackbar.make(view!!, R.string.something_wrong, Snackbar.LENGTH_SHORT).show()
-                //}
-            } else {
-                //Snackbar.make(view!!, R.string.bad_request, Snackbar.LENGTH_SHORT).show()
-            }
-        }
 
+        HTTPHelper.makePostRequest(url, json, { data ->
+            val res = Property.parseJSON(data)
+            if(res !=  null) {
+                callback()
+            }else{
+            }
+        },{
+
+        })
     }
 
     fun remove(callback: () -> Unit){
         callback()
     }
 
+    fun readByParentId(success: (List<Property>?) -> Unit, error: () -> Unit){
+        var units: List<Property>? = null
+
+        val json = JSONObject()
+        json.put("api_token", User.instance!!.apiToken)
+        json.put("userId", User.instance!!.id)
+        json.put("parentId", id)
+
+        HTTPHelper.makePostRequest(URLS.PROPERTY_READ_UNITS_BY_PARENT_ID, json, { data ->
+            units = parseJSONToList(data)
+            success(units)
+        },{
+            error()
+        })
+    }
+
     companion object {
-        fun parseJSON(data: String): List<Property>?{
+        fun parseJSONToList(data: String): List<Property>?{
             var gson = Gson()
             try{
                 var propertyList: List<Property> = gson.fromJson(data, object : TypeToken<List<Property>>() {}.type)
                 return propertyList
+            }catch (ex: Exception){
+                val e = ex
+            }
+            return null
+        }
+
+        fun parseJSON(data: String): Property?{
+            var gson = Gson()
+            try{
+                var property : Property = gson.fromJson(data, object : TypeToken<Property>() {}.type)
+                return property
             }catch (ex: Exception){
                 val e = ex
             }
@@ -111,14 +128,14 @@ class Property(var id: String,
             json.put("userId", User.instance!!.id)
 
             HTTPHelper.makePostRequest(URLS.PROPERTY_READ_ALL, json, { data ->
-                properties = parseJSON(data)
+                properties = parseJSONToList(data)
                 success(properties)
             },{
                 error()
             })
-
-
         }
+
+
 
         fun readById(id: String, callback: (Property) -> Unit){
             var property: Property? = null

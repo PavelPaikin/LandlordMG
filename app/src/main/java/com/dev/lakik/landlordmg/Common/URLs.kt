@@ -11,6 +11,11 @@ class URLS(){
         var API_LOGIN = MAIN_API_URL + "login"
 
         var PROPERTY_CREATE = MAIN_API_URL + "property/create"
+        var PROPERTY_UPDATE = MAIN_API_URL + "property/update"
         var PROPERTY_READ_ALL = MAIN_API_URL + "property/readAll"
+        var PROPERTY_READ_UNITS_BY_PARENT_ID = MAIN_API_URL + "property/readByParentId"
+
+        var LEASE_CREATE = MAIN_API_URL + "lease/create"
+        var LEASE_UPDATE = MAIN_API_URL + "lease/update"
     }
 }

@@ -1,5 +1,6 @@
 package com.dev.lakik.landlordmg.Activities
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -9,22 +10,37 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.*
-import android.widget.Toast
 import com.dev.lakik.landlordmg.Common.Action
 import com.dev.lakik.landlordmg.Common.EnumFragments
-import com.dev.lakik.landlordmg.Fragments.Main.CreateOrEditPropertyFragment
-import com.dev.lakik.landlordmg.Fragments.Main.PropertiesFragment
-import com.dev.lakik.landlordmg.Fragments.Main.PropertyFragment
-import com.dev.lakik.landlordmg.Model.Property
+import com.dev.lakik.landlordmg.Common.GlobalData
+import com.dev.lakik.landlordmg.Fragments.Main.*
+import com.dev.lakik.landlordmg.Fragments.Property.PropertyDetailsFragment
+import com.dev.lakik.landlordmg.Fragments.Property.PropertyUnitsFragment
+import com.dev.lakik.landlordmg.Fragments.Unit.UnitDetailsFragment
+import com.dev.lakik.landlordmg.Fragments.Unit.UnitLeaseFragment
+import com.dev.lakik.landlordmg.Fragments.Unit.UnitTenantsFragment
 import com.dev.lakik.landlordmg.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Rect
+import android.widget.EditText
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+
 
 class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener,
         PropertiesFragment.OnFragmentInteractionListener,
         CreateOrEditPropertyFragment.OnFragmentInteractionListener,
-        PropertyFragment.OnFragmentInteractionListener{
+        PropertyFragment.OnFragmentInteractionListener,
+        PropertyUnitsFragment.OnFragmentInteractionListener,
+        PropertyDetailsFragment.OnFragmentInteractionListener,
+        UnitFragment.OnFragmentInteractionListener,
+        UnitLeaseFragment.OnFragmentInteractionListener,
+        UnitTenantsFragment.OnFragmentInteractionListener,
+        UnitDetailsFragment.OnFragmentInteractionListener,
+        CreateOrEditLeaseFragment.OnFragmentInteractionListener{
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -34,26 +50,52 @@ class MainActivity : AppCompatActivity(),
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-            val tag = currentFragment.tag
+            /*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
+            val tag = currentFragment.tag*/
 
-            when (tag) {
+            when (GlobalData.mainActiveFragment) {
                 PropertiesFragment.TAG -> {
-
                     val args = Bundle()
-                    /*if(property != null) {
-                        args.putSerializable("property", property)
-                    }*/
 
                     args.putSerializable("action", Action.CREATE)
 
                     setFragment(EnumFragments.CREATE_OR_EDIT_PROPERTY_FRAGMENT, args)
                 }
+
+                PropertyFragment.TAG -> {
+                    when(GlobalData.subActiveFragment) {
+                        PropertyUnitsFragment.TAG -> {
+                            val args = Bundle()
+                            if (GlobalData.selectedProperty != null) {
+                                args.putSerializable("property", GlobalData.selectedProperty)
+                            }
+
+                            args.putSerializable("action", Action.CREATE)
+
+                            setFragment(EnumFragments.CREATE_OR_EDIT_PROPERTY_FRAGMENT, args)
+                        }
+                    }
+                }
+                UnitFragment.TAG -> {
+                    when(GlobalData.subActiveFragment) {
+                        UnitLeaseFragment.TAG -> {
+                            val args = Bundle()
+
+                            args.putSerializable("action", Action.CREATE)
+
+                            setFragment(EnumFragments.CREATE_OR_EDIT_LEASE_FRAGMENT, args)
+                        }
+                        UnitTenantsFragment.TAG -> {
+
+                        }
+                    }
+                }
+
             }
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
-            updateUI()
+            //updateUI()
         }
 
         nav_view.setNavigationItemSelectedListener(this)
@@ -67,7 +109,7 @@ class MainActivity : AppCompatActivity(),
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            updateUI()
+            //updateUI()
             super.onBackPressed()
         }
     }
@@ -124,44 +166,57 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
     override fun setFragment(fragmentType: EnumFragments, args: Bundle?) {
         val transaction = supportFragmentManager.beginTransaction()
         var fragment: Fragment? = null
-        var tag: String? = null
         when(fragmentType){
             EnumFragments.PROPERTIES_FRAGMENT -> {
                 fragment = PropertiesFragment.newInstance(args)
-                tag = PropertiesFragment.TAG
-
             }
             EnumFragments.CREATE_OR_EDIT_PROPERTY_FRAGMENT -> {
                 fragment = CreateOrEditPropertyFragment.newInstance(args)
-                tag = CreateOrEditPropertyFragment.TAG
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.CREATE_OR_EDIT_LEASE_FRAGMENT -> {
+                fragment = CreateOrEditLeaseFragment.newInstance(args)
 
                 transaction.addToBackStack(null)
             }
             EnumFragments.PROPERTY_PRAGMENT -> {
                 fragment = PropertyFragment.newInstance(args)
-                tag = PropertyFragment.TAG
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.UNIT_FRAGMENT -> {
+                fragment = UnitFragment.newInstance(args)
 
                 transaction.addToBackStack(null)
             }
         }
 
-        transaction.replace(R.id.mainContainer, fragment,  tag)
+        transaction.replace(R.id.mainContainer, fragment,  GlobalData.mainActiveFragment)
         transaction.commit()
-
-        updateUI(tag)
     }
 
-    fun updateUI(tag: String? = null){
-        var inTag = tag
-        if(inTag == null){
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-            inTag = currentFragment.tag
-        }
-
-        when (inTag) {
+    override fun updateUI(){
+        when (GlobalData.mainActiveFragment) {
             PropertiesFragment.TAG -> {
                 title = "Properties"
                 toggle.isDrawerIndicatorEnabled = true
@@ -184,18 +239,58 @@ class MainActivity : AppCompatActivity(),
                 fab.visibility = INVISIBLE
                 tab_layout.visibility = GONE
             }
+            CreateOrEditLeaseFragment.TAG -> {
+                title = "Create Lease"
+                toggle.isDrawerIndicatorEnabled = false
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+                toolbar.setNavigationOnClickListener {
+                    onBackPressed()
+                }
+
+                fab.visibility = INVISIBLE
+                tab_layout.visibility = GONE
+            }
             PropertyFragment.TAG -> {
                 toggle.isDrawerIndicatorEnabled = true
                 supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                 supportActionBar!!.setHomeButtonEnabled(true)
                 setDrawerToggle()
 
-                fab.visibility = INVISIBLE
                 tab_layout.visibility = VISIBLE
 
-                tab_layout.removeAllTabs()
-                tab_layout.addTab(tab_layout.newTab().setText("Units"))
-                tab_layout.addTab(tab_layout.newTab().setText("Details"))
+                title = GlobalData.selectedProperty!!.name
+
+                when(GlobalData.subActiveFragment){
+                    PropertyUnitsFragment.TAG -> {
+                        fab.visibility = VISIBLE
+                    }
+
+                    PropertyDetailsFragment.TAG -> {
+                        fab.visibility = INVISIBLE
+                    }
+                }
+            }
+            UnitFragment.TAG -> {
+                title = GlobalData.selectedProperty!!.name
+                toggle.isDrawerIndicatorEnabled = true
+                supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                supportActionBar!!.setHomeButtonEnabled(true)
+                setDrawerToggle()
+
+                tab_layout.visibility = VISIBLE
+
+                when(GlobalData.subActiveFragment){
+                    UnitLeaseFragment.TAG -> {
+                        fab.visibility = VISIBLE
+                    }
+                    UnitTenantsFragment.TAG -> {
+                        fab.visibility = VISIBLE
+                    }
+                    UnitDetailsFragment.TAG -> {
+                        fab.visibility = INVISIBLE
+                    }
+                }
             }
         }
     }

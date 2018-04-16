@@ -31,7 +31,7 @@
         completions."
     </string>
 
-    <string name="name">Name*</string>
+    <string name="property_name">Name*</string>
     <string name="address1">Address 1</string>
     <string name="address2">Address 2</string>
     <string name="city">City</string>
@@ -41,7 +41,7 @@
     <string name="bath">Bathrooms</string>
     <string name="type_unit">Single Unit</string>
     <string name="type_multi_unit">Multi-Unit</string>
-    <string name="basic_info">Basic Info</string>
+    <string name="basic_info">Basic Information</string>
     <string name="property_type">Property Type</string>
     <string name="photo">Photo</string>
     <string name="create_property">Create Property</string>
@@ -63,4 +63,18 @@
     <string name="edit_lease">Edit Lease</string>
     <string name="furnished">Furnished</string>
     <string name="pet_friendly">Pet Friendly</string>
+    <string name="property_address">Property Address</string>
+
+    <string name="one_time_charge">One Time Charges</string>
+    <string name="secure_deposit">Secure Deposit</string>
+    <string name="add_onetime_charge">Add one-time charge</string>
+    <string name="add_securety_deposit">Add securety deposit</string>
+
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="rent_cost">Rent Cost</string>
+    <string name="name">Name</string>
+    <string name="amount">Amount</string>
+    <string name="first_payday">First Payday</string>
+    <string name="period">Period</string>
 </resources>

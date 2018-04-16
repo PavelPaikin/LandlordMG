@@ -42,3 +42,7 @@ fun String.ValidRePassword(pass: String) : Boolean{
 
 val Boolean.int
     get() = if (this) 1 else 0
+
+val Int.boolean
+    get() = this == 1
+

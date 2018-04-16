@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager
  */
 
 fun Fragment.hideKeyboard() {
-    activity.hideKeyboard()
+    activity!!.hideKeyboard()
 }
 
 fun Activity.hideKeyboard() {
@@ -24,7 +24,7 @@ fun Context.hideKeyboard(view: View) {
 }
 
 fun Fragment.showKeyboard() {
-    activity.showKeyboard()
+    activity!!.showKeyboard()
 }
 
 fun Activity.showKeyboard() {
