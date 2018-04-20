@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dev.lakik.landlordmg.Activities.LoginActivity"
-    android:id="@+id/loginContainer">
+    android:id="@+id/loginContainer"
+    android:background="@drawable/background">
 
 
 </android.support.constraint.ConstraintLayout>

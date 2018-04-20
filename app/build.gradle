@@ -35,4 +35,8 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel-android:1.12.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'co.infinum:materialdatetimepicker-support:3.5.1'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation group: 'com.cloudinary', name: 'cloudinary-android', version: '1.20.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.szagurskii:patternedtextwatcher:0.5.0'
 }

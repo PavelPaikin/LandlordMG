@@ -12,7 +12,9 @@ import com.dev.lakik.landlordmg.Adapters.unitTabsAdapter
 import com.dev.lakik.landlordmg.Common.EnumFragments
 import com.dev.lakik.landlordmg.Common.GlobalData
 import com.dev.lakik.landlordmg.Fragments.Property.PropertyUnitsFragment
+import com.dev.lakik.landlordmg.Fragments.Unit.UnitDetailsFragment
 import com.dev.lakik.landlordmg.Fragments.Unit.UnitLeaseFragment
+import com.dev.lakik.landlordmg.Fragments.Unit.UnitTenantsFragment
 import com.dev.lakik.landlordmg.Model.Property
 import com.dev.lakik.landlordmg.R
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -38,9 +40,10 @@ class UnitFragment : Fragment() {
         }
 
         activity!!.tab_layout.removeAllTabs()
+        activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Details"))
         activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Lease"))
         activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Tenants"))
-        activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Details"))
+
 
         val adapter = unitTabsAdapter(childFragmentManager, activity!!.tab_layout.tabCount)
         propertyPager.adapter = adapter
@@ -52,10 +55,25 @@ class UnitFragment : Fragment() {
                 GlobalData.subActiveFragment = adapter.getTag(tab.position)
                 currentTab = GlobalData.subActiveFragment
                 listener!!.updateUI()
+
+                if(currentTab == UnitTenantsFragment.TAG){
+                    adapter.updateTenants()
+                    if(GlobalData.selectedProperty!!.lease != null){
+                        listener!!.setFABVisible(true)
+                    }else{
+                        listener!!.setFABVisible(false)
+                    }
+                }
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+
+        currentTab = UnitDetailsFragment.TAG
+
+        if(arguments!!.get("lease")!=null){
+            propertyPager.currentItem = 1
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -74,16 +92,22 @@ class UnitFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity!!.tab_layout.clearOnTabSelectedListeners()
+    }
+
     override fun onResume() {
         super.onResume()
         GlobalData.mainActiveFragment = TAG
-        GlobalData.subActiveFragment = UnitLeaseFragment.TAG
+        GlobalData.subActiveFragment = currentTab
         listener!!.updateUI()
     }
 
     interface OnFragmentInteractionListener {
         fun setFragment(fragment: EnumFragments, args: Bundle?)
         fun updateUI()
+        fun setFABVisible(isVisible: Boolean)
     }
 
     companion object {

@@ -24,14 +24,14 @@ class DividerWithTitle : LinearLayout{
     init{
         LayoutInflater.from(context).inflate(R.layout.custom_view_divider_with_title, this, true)
         orientation = HORIZONTAL
-
     }
+
     fun setAttrs(attrs: AttributeSet){
         attrs?.let{
-            val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DividerWithTitle,0, 0)
+            val a = context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView,0, 0)
 
             try {
-                var titleText = a.getString(R.styleable.DividerWithTitle_titleText)
+                var titleText = a.getString(R.styleable.CustomView_titleText)
                 tvTitle.text = titleText
             } finally {
                 a.recycle()

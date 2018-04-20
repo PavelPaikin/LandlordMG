@@ -11,27 +11,43 @@ import com.dev.lakik.landlordmg.Fragments.Unit.UnitLeaseFragment
 import com.dev.lakik.landlordmg.Fragments.Unit.UnitTenantsFragment
 import com.dev.lakik.landlordmg.Model.Property
 
-class unitTabsAdapter(fm: FragmentManager, private var tabCount: Int) : FragmentPagerAdapter(fm) {
+class unitTabsAdapter(fm: FragmentManager, var tabCount: Int) : FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment? {
-        when (position) {
-            0 -> return UnitLeaseFragment()
-            1 -> return UnitTenantsFragment()
-            2 -> return UnitDetailsFragment()
-            else -> return null
-        }
-    }
+    var tenantFragment: UnitTenantsFragment? = null
 
-    fun getTag(position: Int): String {
-        when (position) {
-            0 -> return UnitLeaseFragment.TAG
-            1 -> return UnitTenantsFragment.TAG
-            2 -> return UnitDetailsFragment.TAG
-            else -> return ""
-        }
+    fun updateTenants() {
+        if(tenantFragment != null)
+            tenantFragment!!.updateView()
     }
 
     override fun getCount(): Int {
         return tabCount
     }
+
+    override fun getItem(position: Int): Fragment? {
+        var fragment: Fragment? = null
+        when (position) {
+            0 -> return UnitDetailsFragment()
+            1 -> return UnitLeaseFragment()
+            2 -> {
+                fragment = UnitTenantsFragment()
+                tenantFragment = fragment
+                return fragment
+            }
+
+            else -> return null
+        }
+    }
+
+
+    fun getTag(position: Int): String {
+        when (position) {
+            0 -> return UnitDetailsFragment.TAG
+            1 -> return UnitLeaseFragment.TAG
+            2 -> return UnitTenantsFragment.TAG
+            else -> return ""
+        }
+    }
+
+
 }

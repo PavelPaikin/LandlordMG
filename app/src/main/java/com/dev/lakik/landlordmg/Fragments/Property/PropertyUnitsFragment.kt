@@ -18,7 +18,6 @@ import com.dev.lakik.landlordmg.Fragments.Main.PropertiesFragment
 import com.dev.lakik.landlordmg.Model.Property
 
 import com.dev.lakik.landlordmg.R
-import kotlinx.android.synthetic.main.fragment_properties.*
 import kotlinx.android.synthetic.main.fragment_property_units.*
 
 class PropertyUnitsFragment : Fragment() {
@@ -36,19 +35,30 @@ class PropertyUnitsFragment : Fragment() {
 
         rvUnits.layoutManager = GridLayoutManager(context, 2) as RecyclerView.LayoutManager?
 
+        pbLoading.visibility = View.VISIBLE
+        llEmptyList.visibility = View.GONE
+        rvUnits.visibility = View.GONE
+
         GlobalData.selectedProperty!!.readByParentId({
-            adapter = rvUnitsAdapter(it as ArrayList<Property>)
-            adapter.onClickListener = { view, property ->
-                var args = Bundle()
-                args.putSerializable("property", property)
+            pbLoading.visibility = View.GONE
 
-                listener!!.setFragment(EnumFragments.UNIT_FRAGMENT, args)
-            }
+            if(it!!.count() > 0) {
+                rvUnits.visibility = View.VISIBLE
+                adapter = rvUnitsAdapter(it as ArrayList<Property>)
+                adapter.onClickListener = { view, property ->
+                    var args = Bundle()
+                    args.putSerializable("property", property)
 
-            adapter.onLongClickListener = { view, property ->
-                Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show()
+                    listener!!.setFragment(EnumFragments.UNIT_FRAGMENT, args)
+                }
+
+                adapter.onLongClickListener = { view, property ->
+                    Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show()
+                }
+                rvUnits.adapter = adapter
+            }else{
+                llEmptyList.visibility = View.VISIBLE
             }
-            rvUnits.adapter = adapter
         },{
             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
         })

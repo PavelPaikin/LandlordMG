@@ -1,19 +1,23 @@
 package com.dev.lakik.landlordmg.Model
 
+import android.util.Log
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.ErrorInfo
+import com.cloudinary.android.callback.UploadCallback
 import com.dev.lakik.landlordmg.Common.URLS
 import com.dev.lakik.landlordmg.Helpers.HTTPHelper
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.Serializable
 import com.google.gson.reflect.TypeToken
-
+import java.io.File
 
 
 /**
  * Created by ppash on 3/16/2018.
  */
 class Property(var id: String,
-               var parentId: String,
+               var parentId: String?,
                var userId: String,
                var type: PropertyType,
                var name: String,
@@ -26,7 +30,11 @@ class Property(var id: String,
                var bathrooms: Int,
                var notes: String,
                var furneture: Int,
-               var petFriendly: Int): Serializable {
+               var petFriendly: Int,
+               var images: String): Serializable {
+
+    var lease: Lease? = null
+    var imageFile: File? = null
 
     enum class PropertyType{
         SINGLE_UNIT,
@@ -35,6 +43,14 @@ class Property(var id: String,
 
 
     fun save(callback: () -> Unit){
+        if(imageFile != null){
+            uploadImage(callback)
+        }else{
+            finalSave(callback)
+        }
+    }
+
+    private fun finalSave(callback: () -> Unit){
         var url = ""
         if(id.isEmpty()){
             url = URLS.PROPERTY_CREATE
@@ -61,7 +77,7 @@ class Property(var id: String,
         json.put("notes", notes)
         json.put("petFriendly", petFriendly)
         json.put("furneture", furneture)
-        json.put("images", "")
+        json.put("images", images)
         json.put("api_token", User.instance!!.apiToken)
 
 
@@ -77,8 +93,49 @@ class Property(var id: String,
         })
     }
 
-    fun remove(callback: () -> Unit){
-        callback()
+    fun uploadImage(callback: () -> Unit){
+        val requestId = MediaManager.get().upload(imageFile!!.absolutePath).callback(object : UploadCallback {
+            override fun onStart(requestId: String) {
+                // your code here
+            }
+
+            override fun onProgress(requestId: String, bytes: Long, totalBytes: Long) {
+                // example code starts here
+                val progress = bytes.toDouble() / totalBytes
+                // post progress to app UI (e.g. progress bar, notification)
+                // example code ends here
+            }
+
+            override fun onSuccess(requestId: String, resultData: Map<*, *>) {
+                // your code here
+                var public_id = resultData.get("public_id").toString()
+                images = public_id
+                finalSave(callback)
+            }
+
+            override fun onError(requestId: String, error: ErrorInfo) {
+                // your code here
+                Log.d("aaaa", requestId)
+            }
+
+            override fun onReschedule(requestId: String, error: ErrorInfo) {
+                // your code here
+            }
+        })
+                .dispatch()
+    }
+
+    fun delete(callback: () -> Unit){
+
+        val json = JSONObject()
+        json.put("id", id)
+        json.put("api_token", User.instance!!.apiToken)
+
+        HTTPHelper.makePostRequest(URLS.PROPERTY_DELETE, json, { data ->
+            callback()
+        }, {
+
+        })
     }
 
     fun readByParentId(success: (List<Property>?) -> Unit, error: () -> Unit){
@@ -92,6 +149,15 @@ class Property(var id: String,
         HTTPHelper.makePostRequest(URLS.PROPERTY_READ_UNITS_BY_PARENT_ID, json, { data ->
             units = parseJSONToList(data)
             success(units)
+        },{
+            error()
+        })
+    }
+
+    fun loadLease(success: (Lease?) -> Unit, error: () -> Unit){
+        Lease.readByUnitId(id, { lease ->
+            this.lease = lease
+            success(lease)
         },{
             error()
         })
@@ -121,25 +187,36 @@ class Property(var id: String,
         }
 
         fun readAll(success: (List<Property>?) -> Unit, error: () -> Unit){
-            var properties: List<Property>? = null
+            //if(User.instance != null) {
+                var properties: List<Property>? = null
 
-            val json = JSONObject()
-            json.put("api_token", User.instance!!.apiToken)
-            json.put("userId", User.instance!!.id)
+                val json = JSONObject()
+                json.put("api_token", User.instance!!.apiToken)
+                json.put("userId", User.instance!!.id)
 
-            HTTPHelper.makePostRequest(URLS.PROPERTY_READ_ALL, json, { data ->
-                properties = parseJSONToList(data)
-                success(properties)
-            },{
-                error()
-            })
+                HTTPHelper.makePostRequest(URLS.PROPERTY_READ_ALL, json, { data ->
+                    properties = parseJSONToList(data)
+                    success(properties)
+                }, {
+                    error()
+                })
+            //}
         }
 
 
 
-        fun readById(id: String, callback: (Property) -> Unit){
+        fun readById(id: String, success: (Property?) -> Unit){
             var property: Property? = null
-            callback(property!!)
+
+            val json = JSONObject()
+            json.put("api_token", User.instance!!.apiToken)
+            json.put("id", id)
+
+            HTTPHelper.makePostRequest(URLS.PROPERTY_READ_BY_ID, json, { data ->
+                property = parseJSON(data)
+                success(property)
+            }, {
+            })
         }
     }
 }

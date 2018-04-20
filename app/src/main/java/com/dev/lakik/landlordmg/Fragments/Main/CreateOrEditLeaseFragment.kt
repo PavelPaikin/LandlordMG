@@ -1,7 +1,6 @@
 package com.dev.lakik.landlordmg.Fragments.Main
 
 import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -11,7 +10,6 @@ import com.dev.lakik.landlordmg.Common.Action
 import com.dev.lakik.landlordmg.Common.EnumFragments
 import com.dev.lakik.landlordmg.Common.GlobalData
 import com.dev.lakik.landlordmg.Model.Lease
-import com.dev.lakik.landlordmg.Model.Property
 
 import com.dev.lakik.landlordmg.R
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -19,16 +17,20 @@ import kotlinx.android.synthetic.main.fragment_create_or_edit_lease.*
 import java.util.*
 import kotlin.collections.ArrayList
 import android.view.ViewGroup
-import android.view.View.MeasureSpec
-import android.opengl.ETC1.getWidth
-import android.widget.LinearLayout
-import android.widget.ListView
+import com.dev.lakik.landlordmg.Adapters.SecuretyDepositListAdapter
+import com.dev.lakik.landlordmg.Extentions.getStringByPattern
+import com.dev.lakik.landlordmg.Helpers.ListViewHelper
 
 
 class CreateOrEditLeaseFragment : Fragment() {
 
     var lease: Lease? = null
     var action: Action? = null
+    var onetimeChargeList: ArrayList<Lease.OneTimeCharge>? = null
+    var securetyDepositList: ArrayList<Lease.securityDeposit>? = null
+
+    var onetimeChargeAdapter: OnetimeChargeListAdapter? = null
+    var securetyDepositAdapter: SecuretyDepositListAdapter? = null
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -60,7 +62,7 @@ class CreateOrEditLeaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var leaseArg = arguments!!.get("lease")
+        var leaseArg = arguments!!.get ("lease")
         if( leaseArg != null) {
             lease = leaseArg as Lease
         }
@@ -71,6 +73,8 @@ class CreateOrEditLeaseFragment : Fragment() {
             setDataToForm()
         }else {
             lease = Lease()
+            onetimeChargeList = ArrayList<Lease.OneTimeCharge>()
+            securetyDepositList = ArrayList<Lease.securityDeposit>()
         }
 
         etStartDate.setOnClickListener(object : View.OnClickListener {
@@ -78,8 +82,8 @@ class CreateOrEditLeaseFragment : Fragment() {
                 var now = Calendar.getInstance();
                 var dpd = DatePickerDialog.newInstance(
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        etStartDate.setText(String.format("%s/%s/%s", dayOfMonth, monthOfYear, year))
                         lease!!.startDate.set(year, monthOfYear, dayOfMonth)
+                        etStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM YYYY"))
                     },
                     lease!!.startDate.get(Calendar.YEAR),
                     lease!!.startDate.get(Calendar.MONTH),
@@ -95,8 +99,8 @@ class CreateOrEditLeaseFragment : Fragment() {
                 var now = Calendar.getInstance();
                 var dpd = DatePickerDialog.newInstance(
                         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                            etEndDate.setText(String.format("%s/%s/%s", dayOfMonth, monthOfYear, year))
                             lease!!.endDate.set(year, monthOfYear, dayOfMonth)
+                            etEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM YYYY"))
                         },
                         lease!!.endDate.get(Calendar.YEAR),
                         lease!!.endDate.get(Calendar.MONTH),
@@ -112,8 +116,8 @@ class CreateOrEditLeaseFragment : Fragment() {
                 var now = Calendar.getInstance();
                 var dpd = DatePickerDialog.newInstance(
                         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                            etNextPayday.setText(String.format("%s/%s/%s", dayOfMonth, monthOfYear, year))
                             lease!!.nextPayday.set(year, monthOfYear, dayOfMonth)
+                            etNextPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM YYYY"))
                         },
                         lease!!.nextPayday.get(Calendar.YEAR),
                         lease!!.nextPayday.get(Calendar.MONTH),
@@ -124,14 +128,26 @@ class CreateOrEditLeaseFragment : Fragment() {
             }
         })
 
-        var onetimeChargeList = ArrayList<Lease.OneTimeCharge>()
-
-        var onetimeChargeAdapter = OnetimeChargeListAdapter(context!!, onetimeChargeList)
+        onetimeChargeAdapter = OnetimeChargeListAdapter(context!!, onetimeChargeList!!)
         lvOnetimeCharges.adapter = onetimeChargeAdapter
-        onetimeChargeAdapter.listView = lvOnetimeCharges
+        onetimeChargeAdapter!!.listView = lvOnetimeCharges
+
+        ListViewHelper.setListViewHeightBasedOnChildren(lvOnetimeCharges)
 
         tvAddOnetimeCharge.setOnClickListener {
-            onetimeChargeAdapter.addEmptyRow()
+            onetimeChargeAdapter!!.addEmptyRow()
+        }
+
+
+
+        securetyDepositAdapter = SecuretyDepositListAdapter(context!!, securetyDepositList!!)
+        lvSecuretyDeposit.adapter = securetyDepositAdapter
+        securetyDepositAdapter!!.listView = lvSecuretyDeposit
+
+        ListViewHelper.setListViewHeightBasedOnChildren(lvSecuretyDeposit)
+
+        tvAddSecuretyDeposit.setOnClickListener {
+            securetyDepositAdapter!!.addEmptyRow()
         }
 
     }
@@ -147,13 +163,18 @@ class CreateOrEditLeaseFragment : Fragment() {
 
        when (item!!.itemId) {
            R.id.done -> {
+               lease!!.unitId = GlobalData.selectedProperty!!.id
+               if(etRentCost.text.toString().isNotEmpty()) {
+                   lease!!.rentCost = etRentCost.text.toString().toDouble()
+               }
+               lease!!.period = etPeriod.text.toString()
 
+               lease!!.oneTimeChargeList = onetimeChargeAdapter!!.items
+               lease!!.securityDepositList = securetyDepositAdapter!!.items
 
-              if(action == Action.CREATE){
-
-              }else{
-
-              }
+               lease!!.save {
+                   activity!!.onBackPressed()
+               }
 
                return true
            }
@@ -167,8 +188,14 @@ class CreateOrEditLeaseFragment : Fragment() {
 
 
     fun setDataToForm(){
+        etStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM YYYY"))
+        etEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM YYYY"))
+        etRentCost.setText(lease!!.rentCost.toString())
+        etNextPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM YYYY"))
+        etPeriod.setText(lease!!.period)
 
-
+        onetimeChargeList = ArrayList(lease!!.oneTimeChargeList)
+        securetyDepositList = ArrayList(lease!!.securityDepositList)
     }
 
     interface OnFragmentInteractionListener {

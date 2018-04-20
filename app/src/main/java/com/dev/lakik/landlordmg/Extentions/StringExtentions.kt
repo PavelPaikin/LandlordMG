@@ -1,5 +1,7 @@
 package com.dev.lakik.landlordmg.Extentions
 
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -46,3 +48,7 @@ val Boolean.int
 val Int.boolean
     get() = this == 1
 
+fun Calendar.getStringByPattern(pattern: String) : String {
+    var res = SimpleDateFormat(pattern, Locale.CANADA).format(this.time)
+    return res
+}

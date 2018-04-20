@@ -8,13 +8,14 @@ import com.dev.lakik.landlordmg.Model.User
 import com.dev.lakik.landlordmg.R
 import com.github.kittinunf.fuel.Fuel
 import org.json.JSONObject
+import java.io.File
 
 class HTTPHelper{
 
     companion object {
         fun makePostRequest(url: String, json: JSONObject, succed: (String) -> Unit, error: () -> Unit){
             Fuel.post(url).body(json.toString()).response { request, response, result ->
-                val (data, error) = result
+                val ( data, error) = result
                 if (error == null) {
                     succed(String(data!!))
                 } else {
@@ -22,5 +23,7 @@ class HTTPHelper{
                 }
             }
         }
+
+
     }
 }

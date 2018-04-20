@@ -11,16 +11,16 @@ class propertyTabAdapter(fm: FragmentManager, private var tabCount: Int) : Fragm
     override fun getItem(position: Int): Fragment? {
 
         when (position) {
-            0 -> return PropertyUnitsFragment()
-            1 -> return PropertyDetailsFragment()
+            0 -> return PropertyDetailsFragment()
+            1 -> return PropertyUnitsFragment()
             else -> return null
         }
     }
 
     fun getTag(position: Int): String {
         when (position) {
-            0 -> return PropertyUnitsFragment.TAG
-            1 -> return PropertyDetailsFragment.TAG
+            0 -> return PropertyDetailsFragment.TAG
+            1 -> return PropertyUnitsFragment.TAG
             else -> return ""
         }
     }

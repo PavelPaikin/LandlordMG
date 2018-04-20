@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:isScrollContainer="true"
+    android:background="@color/appMainBackground"
     tools:context="com.dev.lakik.landlordmg.Fragments.Main.CreateOrEditPropertyFragment">
 
     <LinearLayout
@@ -206,11 +207,14 @@
 
             </com.dev.lakik.landlordmg.CustomView.DividerWithTitle>
 
-            <com.dev.lakik.landlordmg.CustomView.ScrollDisabledListView
+            <ListView
                 android:id="@+id/lvSecuretyDeposit"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:descendantFocusability="beforeDescendants"/>
+                android:descendantFocusability="beforeDescendants"
+                android:divider="@android:color/transparent"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"/>
 
             <TextView
                 android:id="@+id/tvAddSecuretyDeposit"

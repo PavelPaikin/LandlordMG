@@ -1,9 +1,6 @@
 package com.dev.lakik.landlordmg.Adapters
 
-import android.app.Activity
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +8,10 @@ import android.widget.BaseAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ListView
-import com.dev.lakik.landlordmg.Extentions.afterTextChanged
 import com.dev.lakik.landlordmg.Helpers.ListViewHelper
 import com.dev.lakik.landlordmg.Model.Lease
 import com.dev.lakik.landlordmg.R
-import kotlinx.android.synthetic.main.lv_onetime_charge_item.view.*
+import kotlinx.android.synthetic.main.lv_onetime_charge_item_edit.view.*
 
 class OnetimeChargeListAdapter(context: Context, var items: ArrayList<Lease.OneTimeCharge>) : BaseAdapter() {
 
@@ -38,7 +34,7 @@ class OnetimeChargeListAdapter(context: Context, var items: ArrayList<Lease.OneT
         val view: View?
         val vh: ListRowHolder
         if (convertView == null) {
-            view = this.mInflator.inflate(R.layout.lv_onetime_charge_item, parent, false)
+            view = this.mInflator.inflate(R.layout.lv_onetime_charge_item_edit, parent, false)
             vh = ListRowHolder(view)
             view.tag = vh
         } else {

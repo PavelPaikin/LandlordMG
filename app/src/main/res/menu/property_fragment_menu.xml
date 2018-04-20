@@ -6,4 +6,9 @@
         android:id="@+id/edit"
         android:title="Edit"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="Remove"
+        app:showAsAction="never" />
 </menu>

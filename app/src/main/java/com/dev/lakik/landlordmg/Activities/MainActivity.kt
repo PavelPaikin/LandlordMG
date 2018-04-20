@@ -1,5 +1,6 @@
 package com.dev.lakik.landlordmg.Activities
 
+import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -23,10 +24,24 @@ import com.dev.lakik.landlordmg.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Rect
+import android.support.design.widget.Snackbar
+import android.util.Log
 import android.widget.EditText
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.cloudinary.android.MediaManager
+import com.dev.lakik.landlordmg.Extentions.containsOnly
+import com.dev.lakik.landlordmg.Extentions.requestPermission
+import com.dev.lakik.landlordmg.Extentions.shouldShowPermissionRationale
+import com.dev.lakik.landlordmg.Fragments.Leases.ActiveLeases
+import com.dev.lakik.landlordmg.Fragments.Leases.ClosedLeases
+import com.dev.lakik.landlordmg.Model.User
+import kotlinx.android.synthetic.main.content_main.*
 
 
 class MainActivity : AppCompatActivity(),
@@ -40,7 +55,15 @@ class MainActivity : AppCompatActivity(),
         UnitLeaseFragment.OnFragmentInteractionListener,
         UnitTenantsFragment.OnFragmentInteractionListener,
         UnitDetailsFragment.OnFragmentInteractionListener,
-        CreateOrEditLeaseFragment.OnFragmentInteractionListener{
+        CreateOrEditLeaseFragment.OnFragmentInteractionListener,
+        CreateOrEditTenantFragment.OnFragmentInteractionListener,
+        ViewTenantFragment.OnFragmentInteractionListener,
+        LeasesFragment.OnFragmentInteractionListener,
+        ActiveLeases.OnFragmentInteractionListener,
+        ClosedLeases.OnFragmentInteractionListener,
+        ViewClosedLeaseFragment.OnFragmentInteractionListener,
+        ViewAllTenantsFragment.OnFragmentInteractionListener,
+        LicenseFragment.OnFragmentInteractionListener{
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -49,9 +72,17 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+
+        try {
+            MediaManager.init(this);
+        }catch (ex: Exception){}
+
+        if(User.instance == null){
+            User.loadFromFile(this)
+        }
+
+
         fab.setOnClickListener { view ->
-            /*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-            val tag = currentFragment.tag*/
 
             when (GlobalData.mainActiveFragment) {
                 PropertiesFragment.TAG -> {
@@ -86,16 +117,16 @@ class MainActivity : AppCompatActivity(),
                             setFragment(EnumFragments.CREATE_OR_EDIT_LEASE_FRAGMENT, args)
                         }
                         UnitTenantsFragment.TAG -> {
+                            val args = Bundle()
 
+                            args.putSerializable("action", Action.CREATE)
+
+                            setFragment(EnumFragments.CREATE_OR_EDIT_TENANT_FRAGMENT, args)
                         }
                     }
                 }
 
             }
-        }
-
-        supportFragmentManager.addOnBackStackChangedListener {
-            //updateUI()
         }
 
         nav_view.setNavigationItemSelectedListener(this)
@@ -105,11 +136,15 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    override fun onStop() {
+        User.saveToFile(this)
+        super.onStop()
+    }
+
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            //updateUI()
             super.onBackPressed()
         }
     }
@@ -125,8 +160,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-
-
         android.R.id.home -> {
             onBackPressed()
             true
@@ -142,24 +175,24 @@ class MainActivity : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_properties -> {
+                setFragment(EnumFragments.PROPERTIES_FRAGMENT, null)
             }
-            R.id.nav_gallery -> {
+            R.id.nav_leases -> {
+                setFragment(EnumFragments.LEASES_FRAGMENT, null)
+            }
+            R.id.nav_tenants -> {
+                setFragment(EnumFragments.VIEW_ALL_TENANTS_FRAGMENT, null)
+            }
+            R.id.nav_license ->{
+                setFragment(EnumFragments.LICENSE_FRAGMENT, null)
+            }
+            R.id.nav_logout -> {
+                var intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
 
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
-            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -209,6 +242,36 @@ class MainActivity : AppCompatActivity(),
 
                 transaction.addToBackStack(null)
             }
+            EnumFragments.CREATE_OR_EDIT_TENANT_FRAGMENT -> {
+                fragment = CreateOrEditTenantFragment.newInstance(args)
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.VIEW_TENANT_FRAGMENT -> {
+                fragment = ViewTenantFragment.newInstance(args)
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.LEASES_FRAGMENT -> {
+                fragment = LeasesFragment.newInstance(args)
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.VIEW_CLOSED_LEASE_FRAGMENT -> {
+                fragment = ViewClosedLeaseFragment.newInstance(args)
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.VIEW_ALL_TENANTS_FRAGMENT -> {
+                fragment = ViewAllTenantsFragment.newInstance(args)
+
+                transaction.addToBackStack(null)
+            }
+            EnumFragments.LICENSE_FRAGMENT -> {
+                fragment = LicenseFragment.newInstance(args)
+
+                transaction.addToBackStack(null)
+            }
         }
 
         transaction.replace(R.id.mainContainer, fragment,  GlobalData.mainActiveFragment)
@@ -251,6 +314,62 @@ class MainActivity : AppCompatActivity(),
                 fab.visibility = INVISIBLE
                 tab_layout.visibility = GONE
             }
+            CreateOrEditTenantFragment.TAG -> {
+                title = ""
+                toggle.isDrawerIndicatorEnabled = false
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+                toolbar.setNavigationOnClickListener {
+                    onBackPressed()
+                }
+
+                fab.visibility = INVISIBLE
+                tab_layout.visibility = GONE
+            }
+            ViewTenantFragment.TAG -> {
+                title = ""
+                toggle.isDrawerIndicatorEnabled = false
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+                toolbar.setNavigationOnClickListener {
+                    onBackPressed()
+                }
+
+                fab.visibility = INVISIBLE
+                tab_layout.visibility = GONE
+            }
+            ViewClosedLeaseFragment.TAG -> {
+                title = ""
+                toggle.isDrawerIndicatorEnabled = false
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+                toolbar.setNavigationOnClickListener {
+                    onBackPressed()
+                }
+
+                fab.visibility = INVISIBLE
+                tab_layout.visibility = GONE
+            }
+            ViewAllTenantsFragment.TAG -> {
+            title = "Tenants"
+            toggle.isDrawerIndicatorEnabled = true
+            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+            supportActionBar!!.setHomeButtonEnabled(true)
+            setDrawerToggle()
+
+            fab.visibility = INVISIBLE
+            tab_layout.visibility = GONE
+            }
+            LicenseFragment.TAG -> {
+                title = "License"
+                toggle.isDrawerIndicatorEnabled = true
+                supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                supportActionBar!!.setHomeButtonEnabled(true)
+                setDrawerToggle()
+
+                fab.visibility = INVISIBLE
+                tab_layout.visibility = GONE
+            }
             PropertyFragment.TAG -> {
                 toggle.isDrawerIndicatorEnabled = true
                 supportActionBar!!.setDisplayHomeAsUpEnabled(false)
@@ -282,7 +401,11 @@ class MainActivity : AppCompatActivity(),
 
                 when(GlobalData.subActiveFragment){
                     UnitLeaseFragment.TAG -> {
-                        fab.visibility = VISIBLE
+                        if(GlobalData.selectedProperty!!.lease == null) {
+                            fab.visibility = VISIBLE
+                        }else{
+                            fab.visibility = INVISIBLE
+                        }
                     }
                     UnitTenantsFragment.TAG -> {
                         fab.visibility = VISIBLE
@@ -292,6 +415,34 @@ class MainActivity : AppCompatActivity(),
                     }
                 }
             }
+            LeasesFragment.TAG -> {
+                toggle.isDrawerIndicatorEnabled = true
+                supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                supportActionBar!!.setHomeButtonEnabled(true)
+                setDrawerToggle()
+
+                tab_layout.visibility = VISIBLE
+
+                title = "Leases"
+
+                when(GlobalData.subActiveFragment){
+                    ActiveLeases.TAG -> {
+                        fab.visibility = INVISIBLE
+                    }
+
+                    ClosedLeases.TAG -> {
+                        fab.visibility = INVISIBLE
+                    }
+                }
+            }
+        }
+    }
+
+    override fun setFABVisible(isVisible: Boolean){
+        if(isVisible){
+            fab.visibility = View.VISIBLE
+        }else{
+            fab.visibility = View.INVISIBLE
         }
     }
 
@@ -302,6 +453,8 @@ class MainActivity : AppCompatActivity(),
         toggle.syncState()
     }
 
+
+    ///////////////////////////////////////////
 
 
 }

@@ -2,7 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
     tools:context="com.dev.lakik.landlordmg.Fragments.Login.RegistrationFragment">
+
+    <TextView
+        android:id="@+id/tvHello2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/roboto_thinitalic"
+        android:text="Hello,"
+        android:textSize="60sp" />
 
     <ProgressBar
         android:id="@+id/registration_progress"
@@ -16,7 +29,10 @@
         android:id="@+id/registration_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal">
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
 
         <LinearLayout
             android:id="@+id/email_registration_form"
@@ -28,9 +44,10 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,9 +60,11 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,9 +76,10 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,19 +95,21 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_repassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/prompt_repassword_hint"
                     android:imeActionId="6"
                     android:imeActionLabel="@string/prompt_repassword"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -98,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_up"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <TextView
@@ -107,7 +130,8 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/already_have_account"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
     </FrameLayout>

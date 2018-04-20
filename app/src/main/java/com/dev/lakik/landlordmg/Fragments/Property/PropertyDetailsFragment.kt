@@ -5,18 +5,23 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
+import android.widget.ImageView
+import com.cloudinary.Transformation
+import com.cloudinary.android.MediaManager
 import com.dev.lakik.landlordmg.Common.Action
 import com.dev.lakik.landlordmg.Common.EnumFragments
 import com.dev.lakik.landlordmg.Common.GlobalData
 import com.dev.lakik.landlordmg.Fragments.Main.CreateOrEditPropertyFragment
 import com.dev.lakik.landlordmg.Fragments.Main.PropertyFragment
+import com.dev.lakik.landlordmg.Model.Property
 
 import com.dev.lakik.landlordmg.R
-import kotlinx.android.synthetic.main.fragment_create_or_edit_property.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_property_details.*
 
 class PropertyDetailsFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+    lateinit var property: Property
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -26,13 +31,19 @@ class PropertyDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val property = GlobalData.selectedProperty!!
+        property = GlobalData.selectedProperty!!
+
+        if(property!!.images.isNotEmpty()) {
+            var imgName = property!!.images + ".jpg"
+            imgProperty.scaleType = ImageView.ScaleType.CENTER_CROP
+            Picasso.get().load(MediaManager.get().url().transformation(Transformation<Transformation<out Transformation<*>>?>().width(500)!!.height(500)).generate(imgName)).resize(500, 500).centerCrop().into(imgProperty)
+        }
 
         tvName.text = property.name
         if(property.notes.isNotEmpty()){
             tvNotes.text = property.notes
         }else{
-            etNotes.visibility = View.GONE
+            tvNotes.visibility = View.GONE
         }
 
         tvAddress.text = property.address1 + " " + property.address2
@@ -71,6 +82,12 @@ class PropertyDetailsFragment : Fragment() {
                 args.putSerializable("action", Action.EDIT)
 
                 listener!!.setFragment(EnumFragments.CREATE_OR_EDIT_PROPERTY_FRAGMENT, args)
+                return true
+            }
+            R.id.delete -> {
+                property!!.delete {
+                    activity!!.onBackPressed()
+                }
                 return true
             }
 

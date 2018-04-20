@@ -14,6 +14,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_repassword">Re-Password</string>
+    <string name="prompt_repassword_hint">Repeat Password</string>
     <string name="promt_name">Name</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_sign_in">Sign in</string>
@@ -77,4 +78,23 @@
     <string name="amount">Amount</string>
     <string name="first_payday">First Payday</string>
     <string name="period">Period</string>
+
+    <string name="empty_list">List is empty</string>
+    <string name="no_units">No Units</string>
+    <string name="no_lease">No Lease</string>
+    <string name="no_tenants">No Tenants</string>
+    <string name="enter_name_here">Enter Tenant Name Here</string>
+    <string name="phone_numbers">Phone Numbers</string>
+
+    <string name="add_phone_number">Add phone number</string>
+    <string name="email_addresses">Email addresses</string>
+    <string name="add_email_address">Add email address</string>
+    <string name="pick_image_intent_text">Pick Image</string>
+    <string name="permission_camera_rationale">Get Camera permission</string>
+    <string name="ok">Ok</string>
+
+    <string name="permission_granded">Permission Granded</string>
+    <string name="permission_not_granded">Permision Not Granded</string>
+    <string name="phone_hint">(xxx)xxx-xx-xx</string>
+    <string name="email">Email</string>
 </resources>

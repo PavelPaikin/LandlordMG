@@ -9,22 +9,15 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import com.dev.lakik.landlordmg.Adapters.rvPropertyAdapter
 import com.dev.lakik.landlordmg.Common.EnumFragments
 import com.dev.lakik.landlordmg.Common.GlobalData
-import com.dev.lakik.landlordmg.Common.URLS
-import com.dev.lakik.landlordmg.Helpers.HTTPHelper
 import com.dev.lakik.landlordmg.Model.Property
-import com.dev.lakik.landlordmg.Model.User
 
 import com.dev.lakik.landlordmg.R
-import com.github.kittinunf.fuel.Fuel
 import kotlinx.android.synthetic.main.fragment_properties.*
-import org.json.JSONObject
 
 class PropertiesFragment : Fragment() {
 
@@ -33,32 +26,46 @@ class PropertiesFragment : Fragment() {
     private lateinit var adapter: rvPropertyAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater!!.inflate(R.layout.fragment_properties, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pbLoading.visibility = View.VISIBLE
+        rvProperties.visibility = View.GONE
+        llEmptyList.visibility = View.GONE
 
         rvProperties.layoutManager = GridLayoutManager(context, 2) as RecyclerView.LayoutManager?
 
         Property.readAll({
-            adapter = rvPropertyAdapter(it as ArrayList<Property>)
-            adapter.onClickListener = { view, property ->
-                var args = Bundle()
-                args.putSerializable("property", property)
+            pbLoading.visibility = View.GONE
 
-                if(property.type == Property.PropertyType.SINGLE_UNIT){
-                    listener!!.setFragment(EnumFragments.UNIT_FRAGMENT, args)
-                }else if(property.type == Property.PropertyType.MULTI_UNIT){
-                    listener!!.setFragment(EnumFragments.PROPERTY_PRAGMENT, args)
+            if(it != null && it!!.count() > 0) {
+                rvProperties.visibility = View.VISIBLE
+                llEmptyList.visibility = View.GONE
+
+                adapter = rvPropertyAdapter(it!! as ArrayList<Property>)
+                adapter.onClickListener = { view, property ->
+                    var args = Bundle()
+                    args.putSerializable("property", property)
+
+                    if (property.type == Property.PropertyType.SINGLE_UNIT) {
+                        listener!!.setFragment(EnumFragments.UNIT_FRAGMENT, args)
+                    } else if (property.type == Property.PropertyType.MULTI_UNIT) {
+                        listener!!.setFragment(EnumFragments.PROPERTY_PRAGMENT, args)
+                    }
+
                 }
 
+                adapter.onLongClickListener = { view, property ->
+                    Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show()
+                }
+                rvProperties.adapter = adapter
+            }else{
+                rvProperties.visibility = View.GONE
+                llEmptyList.visibility = View.VISIBLE
             }
-            
-            adapter.onLongClickListener = { view, property ->
-                Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show()
-            }
-            rvProperties.adapter = adapter
         },{
             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
         })
@@ -77,6 +84,11 @@ class PropertiesFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu!!.clear()
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onResume() {

@@ -3,11 +3,14 @@ package com.dev.lakik.landlordmg.Adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import com.cloudinary.Transformation
+import com.cloudinary.android.MediaManager
 import com.dev.lakik.landlordmg.Extentions.inflate
 import com.dev.lakik.landlordmg.Model.Property
 import com.dev.lakik.landlordmg.R
-import kotlinx.android.synthetic.main.rv_item_property.view.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_item_unit.view.*
 
 class rvUnitsAdapter(private val properties: ArrayList<Property>) : RecyclerView.Adapter<rvUnitsAdapter.UnitsHolder>()  {
@@ -56,6 +59,12 @@ class rvUnitsAdapter(private val properties: ArrayList<Property>) : RecyclerView
             //Picasso.with(view.context).load(photo.url).into(view.itemImage)
             view.tvUnitName.text = property.name
             view.tvTenantName.text = ""
+
+            if(property.images.isNotEmpty()) {
+                var imgName =property.images + ".jpg"
+                view.imgUnit.scaleType = ImageView.ScaleType.CENTER_CROP
+                Picasso.get().load(MediaManager.get().url().transformation(Transformation<Transformation<out Transformation<*>>?>().width(256)!!.height(256).gravity("faces").crop("fill")).generate(imgName)).into(view.imgUnit)
+            }
         }
 
         companion object {

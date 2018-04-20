@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/appMainBackground"
     tools:context=".Fragments.Property.PropertyDetailsFragment">
 
 
@@ -15,9 +16,9 @@
         android:background="@color/lightGray">
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/imgProperty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/no_image" />
     </FrameLayout>
@@ -30,19 +31,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <com.dev.lakik.landlordmg.CustomView.DividerWithTitle
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                custom:titleText="@string/basic_info">
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-            </com.dev.lakik.landlordmg.CustomView.DividerWithTitle>
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:src="@drawable/ic_info_outline_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="32dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/basic_info"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
                 android:layout_weight="1"
                 android:text="TextView" />
 
@@ -50,19 +71,48 @@
                 android:id="@+id/tvNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
                 android:text="TextView" />
 
-            <com.dev.lakik.landlordmg.CustomView.DividerWithTitle
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/gray" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                custom:titleText="@string/property_address">
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-            </com.dev.lakik.landlordmg.CustomView.DividerWithTitle>
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:src="@drawable/ic_location_on_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="32dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/property_address"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
                 android:layout_weight="1"
                 android:text="TextView" />
 
@@ -70,6 +120,7 @@
                 android:id="@+id/tvCityStatePostalCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
                 android:text="TextView" />
 
 

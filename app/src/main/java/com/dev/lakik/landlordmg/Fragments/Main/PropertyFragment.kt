@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.dev.lakik.landlordmg.Adapters.propertyTabAdapter
 import com.dev.lakik.landlordmg.Common.EnumFragments
 import com.dev.lakik.landlordmg.Common.GlobalData
+import com.dev.lakik.landlordmg.Fragments.Property.PropertyDetailsFragment
 import com.dev.lakik.landlordmg.Fragments.Property.PropertyUnitsFragment
 import com.dev.lakik.landlordmg.Model.Property
 import com.dev.lakik.landlordmg.R
@@ -37,8 +38,8 @@ class PropertyFragment : Fragment() {
         }
 
         activity!!.tab_layout.removeAllTabs()
-        activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Units"))
         activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Details"))
+        activity!!.tab_layout.addTab(activity!!.tab_layout.newTab().setText("Units"))
 
         val adapter = propertyTabAdapter(childFragmentManager, activity!!.tab_layout.tabCount)
         propertyPager.adapter = adapter
@@ -55,7 +56,7 @@ class PropertyFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        currentTab = PropertyUnitsFragment.TAG
+        currentTab = PropertyDetailsFragment.TAG
     }
 
     override fun onAttach(context: Context) {

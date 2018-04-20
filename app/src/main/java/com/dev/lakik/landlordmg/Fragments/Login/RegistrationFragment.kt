@@ -34,13 +34,13 @@ class RegistrationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tvSignUp.setOnClickListener(View.OnClickListener {
-            mListener!!.setFragment(EnumFragments.LOGIN_FRAGMENT)
+            activity!!.onBackPressed()
         })
 
         registration_button.setOnClickListener(View.OnClickListener {
 
             ed_email.error = null
-            ed_name.error = null
+            //ed_name.error = null
             ed_password.error = null
             ed_repassword.error = null
 
@@ -54,7 +54,7 @@ class RegistrationFragment : Fragment() {
                 hideKeyboard()
                 val json = JSONObject()
                 json.put("email", email)
-                json.put("name", name)
+                json.put("name", "")
                 json.put("password", pass)
 
                 Fuel.post(URLS.API_SIGN_UP).body(json.toString()).response { request, response, result ->
@@ -85,11 +85,11 @@ class RegistrationFragment : Fragment() {
             return
         }
 
-        if(!name.ValidUserName()){
+        /*if(!name.ValidUserName()){
             ed_name.error = getString(R.string.error_cant_be_empty)
             invalid(ed_name)
             return
-        }
+        }*/
 
         if(!pass.ValidPassword()){
             ed_password.error = getString(R.string.error_wrong_password_format)
