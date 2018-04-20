@@ -15,6 +15,7 @@ import com.dev.lakik.landlordmg.Common.URLS
 import com.dev.lakik.landlordmg.Extentions.ValidEmail
 import com.dev.lakik.landlordmg.Extentions.ValidPassword
 import com.dev.lakik.landlordmg.Extentions.hideKeyboard
+import com.dev.lakik.landlordmg.Helpers.myCrypt
 import com.dev.lakik.landlordmg.Model.User
 
 import com.dev.lakik.landlordmg.R
@@ -48,11 +49,11 @@ class LoginFragment : Fragment() {
             val pass = etLoginPassword.text.toString()
 
             formValidate(email, pass, {
-
+                var crypt = myCrypt()
                 hideKeyboard()
                 val json = JSONObject()
                 json.put("email", email)
-                json.put("password", pass)
+                json.put("password", crypt.encrypt(pass))
 
                 Fuel.post(URLS.API_LOGIN).body(json.toString()).response { request, response, result ->
                     val (data, error) = result

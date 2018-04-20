@@ -13,6 +13,7 @@ import android.widget.EditText
 import com.dev.lakik.landlordmg.Common.EnumFragments
 import com.dev.lakik.landlordmg.Common.URLS
 import com.dev.lakik.landlordmg.Extentions.*
+import com.dev.lakik.landlordmg.Helpers.myCrypt
 import com.dev.lakik.landlordmg.Model.User
 
 import com.dev.lakik.landlordmg.R
@@ -50,12 +51,12 @@ class RegistrationFragment : Fragment() {
             val repass = ed_repassword.text.toString()
 
             formValidate(email, name, pass, repass, {
-
+                var crypt = myCrypt()
                 hideKeyboard()
                 val json = JSONObject()
                 json.put("email", email)
                 json.put("name", "")
-                json.put("password", pass)
+                json.put("password", crypt.encrypt(pass))
 
                 Fuel.post(URLS.API_SIGN_UP).body(json.toString()).response { request, response, result ->
                     val (data, error) = result
