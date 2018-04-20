@@ -1,0 +1,194 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appMainBackground">
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/llEmptyList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="0.1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_insert_drive_file_black_24dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_lease"
+            android:textColor="@android:color/black"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/svLeaseDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:visibility="gone"
+        tools:context="com.dev.lakik.landlordmg.Fragments.Main.CreateOrEditPropertyFragment">
+
+        <LinearLayout
+            android:id="@+id/llLeaseDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="80dp">
+
+            <LinearLayout
+                android:id="@+id/llBasicInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <com.dev.lakik.landlordmg.CustomView.DividerWithTitle
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    custom:titleText="@string/basic_info">
+
+                </com.dev.lakik.landlordmg.CustomView.DividerWithTitle>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <com.dev.lakik.landlordmg.CustomView.DataWithTitle
+                        android:id="@+id/dtStartDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        custom:titleText="@string/start_date" />
+
+                    <com.dev.lakik.landlordmg.CustomView.DataWithTitle
+                        android:id="@+id/dtEndDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        custom:titleText="@string/end_date" />
+                </LinearLayout>
+
+                <com.dev.lakik.landlordmg.CustomView.DataWithTitle
+                    android:id="@+id/dtRentCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    custom:titleText="@string/rent_cost" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <com.dev.lakik.landlordmg.CustomView.DataWithTitle
+                        android:id="@+id/dtFirstPayday"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        custom:titleText="@string/first_payday" />
+
+                    <com.dev.lakik.landlordmg.CustomView.DataWithTitle
+                        android:id="@+id/dtPeriod"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        custom:titleText="@string/period" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOneTimeCharge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <com.dev.lakik.landlordmg.CustomView.DividerWithTitle
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    custom:titleText="@string/one_time_charge">
+
+
+                </com.dev.lakik.landlordmg.CustomView.DividerWithTitle>
+
+                <ListView
+                    android:id="@+id/lvOnetimeCharges"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="beforeDescendants"
+                    android:divider="@android:color/transparent"
+                    android:footerDividersEnabled="false"
+                    android:headerDividersEnabled="false" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llSecureDeposit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <com.dev.lakik.landlordmg.CustomView.DividerWithTitle
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    custom:titleText="@string/secure_deposit">
+
+                </com.dev.lakik.landlordmg.CustomView.DividerWithTitle>
+
+                <ListView
+                    android:id="@+id/lvSecuretyDeposit"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:descendantFocusability="beforeDescendants"
+                    android:divider="@android:color/transparent"
+                    android:footerDividersEnabled="false"
+                    android:headerDividersEnabled="false" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

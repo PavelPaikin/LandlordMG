@@ -5,4 +5,96 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login2">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_repassword">Re-Password</string>
+    <string name="prompt_repassword_hint">Repeat Password</string>
+    <string name="promt_name">Name</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="dont_have_account">Dont have account? Sign Up</string>
+    <string name="already_have_account">Already have account? Sign In</string>
+
+    <string name="bad_request">Error, Try later</string>
+    <string name="wrong_email_or_password">Wrong email or password</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="property_name">Name*</string>
+    <string name="address1">Address 1</string>
+    <string name="address2">Address 2</string>
+    <string name="city">City</string>
+    <string name="province">Province</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="rooms">Rooms</string>
+    <string name="bath">Bathrooms</string>
+    <string name="type_unit">Single Unit</string>
+    <string name="type_multi_unit">Multi-Unit</string>
+    <string name="basic_info">Basic Information</string>
+    <string name="property_type">Property Type</string>
+    <string name="photo">Photo</string>
+    <string name="create_property">Create Property</string>
+    <string name="edit_property">Edit Property</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="create">Create</string>
+    <string name="addition_info">Additional Info</string>
+    <string name="notes">Notes</string>
+    <string name="properties">Properties</string>
+    <string name="no_property_created">No Property Created</string>
+    <string name="units">Units</string>
+    <string name="details">Details</string>
+    <string name="no_units_created">No Units Created</string>
+    <string name="no_lease_created">No Lease Created</string>
+    <string name="lease">Lease</string>
+    <string name="tenants">Tenants</string>
+    <string name="create_lease">Create Lease</string>
+    <string name="edit_lease">Edit Lease</string>
+    <string name="furnished">Furnished</string>
+    <string name="pet_friendly">Pet Friendly</string>
+    <string name="property_address">Property Address</string>
+
+    <string name="one_time_charge">One Time Charges</string>
+    <string name="secure_deposit">Secure Deposit</string>
+    <string name="add_onetime_charge">Add one-time charge</string>
+    <string name="add_securety_deposit">Add securety deposit</string>
+
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="rent_cost">Rent Cost</string>
+    <string name="name">Name</string>
+    <string name="amount">Amount</string>
+    <string name="first_payday">First Payday</string>
+    <string name="period">Period</string>
+
+    <string name="empty_list">List is empty</string>
+    <string name="no_units">No Units</string>
+    <string name="no_lease">No Lease</string>
+    <string name="no_tenants">No Tenants</string>
+    <string name="enter_name_here">Enter Tenant Name Here</string>
+    <string name="phone_numbers">Phone Numbers</string>
+
+    <string name="add_phone_number">Add phone number</string>
+    <string name="email_addresses">Email addresses</string>
+    <string name="add_email_address">Add email address</string>
+    <string name="pick_image_intent_text">Pick Image</string>
+    <string name="permission_camera_rationale">Get Camera permission</string>
+    <string name="ok">Ok</string>
+
+    <string name="permission_granded">Permission Granded</string>
+    <string name="permission_not_granded">Permision Not Granded</string>
+    <string name="phone_hint">(xxx)xxx-xx-xx</string>
+    <string name="email">Email</string>
 </resources>
