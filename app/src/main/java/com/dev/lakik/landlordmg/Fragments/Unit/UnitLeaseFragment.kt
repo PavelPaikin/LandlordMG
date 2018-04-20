@@ -40,10 +40,10 @@ class UnitLeaseFragment : Fragment() {
                 GlobalData.selectedProperty!!.lease = lease
 
                 if (lease != null) {
-                    dtStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM YYYY"))
-                    dtEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM YYYY"))
+                    dtStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM yyyy"))
+                    dtEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM yyyy"))
                     dtRentCost.setText(lease!!.rentCost.toString())
-                    dtFirstPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM YYYY"))
+                    dtFirstPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM yyyy"))
                     dtPeriod.setText(lease!!.period)
 
                     var onetimeChargeAdapter = OnetimeChargeListViewAdapter(context!!, lease!!.oneTimeChargeList)

@@ -68,9 +68,9 @@ class rvLeaseAdapter(private val items: ArrayList<Lease>) : RecyclerView.Adapter
             }
 
             var dates = StringBuilder()
-            dates.append(lease.startDate.getStringByPattern("dd MMM YY"))
+            dates.append(lease.startDate.getStringByPattern("dd MMM yy"))
             dates.append("\n-\n")
-            dates.append(lease.endDate.getStringByPattern("dd MMM YY"))
+            dates.append(lease.endDate.getStringByPattern("dd MMM yy"))
 
             view.tvDates.text = dates
 
