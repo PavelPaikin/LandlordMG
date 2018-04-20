@@ -83,7 +83,7 @@ class CreateOrEditLeaseFragment : Fragment() {
                 var dpd = DatePickerDialog.newInstance(
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         lease!!.startDate.set(year, monthOfYear, dayOfMonth)
-                        etStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM YYYY"))
+                        etStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM yyyy"))
                     },
                     lease!!.startDate.get(Calendar.YEAR),
                     lease!!.startDate.get(Calendar.MONTH),
@@ -100,7 +100,7 @@ class CreateOrEditLeaseFragment : Fragment() {
                 var dpd = DatePickerDialog.newInstance(
                         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                             lease!!.endDate.set(year, monthOfYear, dayOfMonth)
-                            etEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM YYYY"))
+                            etEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM yyyy"))
                         },
                         lease!!.endDate.get(Calendar.YEAR),
                         lease!!.endDate.get(Calendar.MONTH),
@@ -117,7 +117,7 @@ class CreateOrEditLeaseFragment : Fragment() {
                 var dpd = DatePickerDialog.newInstance(
                         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                             lease!!.nextPayday.set(year, monthOfYear, dayOfMonth)
-                            etNextPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM YYYY"))
+                            etNextPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM yyyy"))
                         },
                         lease!!.nextPayday.get(Calendar.YEAR),
                         lease!!.nextPayday.get(Calendar.MONTH),
@@ -188,10 +188,10 @@ class CreateOrEditLeaseFragment : Fragment() {
 
 
     fun setDataToForm(){
-        etStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM YYYY"))
-        etEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM YYYY"))
+        etStartDate.setText(lease!!.startDate.getStringByPattern("dd MMM yyyy"))
+        etEndDate.setText(lease!!.endDate.getStringByPattern("dd MMM yyyy"))
         etRentCost.setText(lease!!.rentCost.toString())
-        etNextPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM YYYY"))
+        etNextPayday.setText(lease!!.nextPayday.getStringByPattern("dd MMM yyyy"))
         etPeriod.setText(lease!!.period)
 
         onetimeChargeList = ArrayList(lease!!.oneTimeChargeList)
